@@ -1,0 +1,42 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf610
+{\fonttbl\f0\fnil\fcharset0 Georgia;\f1\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red251\green2\blue7;}
+{\*\expandedcolortbl;;\cssrgb\c100000\c14913\c0;}
+\paperw11900\paperh16840\margl1011\margr1011\margb1445\margt1011\vieww17900\viewh15620\viewkind1\viewscale146
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\fi722\sl288\slmult1\pardirnatural\qc\partightenfactor0
+
+\f0\b\fs28 \cf0 Programs in C for Part1\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\fi722\sl288\slmult1\pardirnatural\partightenfactor0
+
+\b0\fs24 \cf0 \
+1/ 
+\b Pico-simulator in C
+\b0 \
+Files 
+\b \cf2 ps.h
+\b0 \cf0  and 
+\b \cf2 ps.c
+\b0 \cf0 . Using for instance the command  
+\b \cf2 gcc  -c  -o  ps.o  ps.c
+\b0 \cf0   we obtain the object code in file 
+\b \cf2 ps.o
+\b0 \cf0  and, for instance, 
+\b \cf2 gcc -o MM1 ps.o MM1.c -lm
+\b0 \cf0  builds the simulator 
+\b \cf2 MM1
+\b0 \cf0  of the 
+\i M
+\i0 /
+\i M
+\i0 /1 classic queue (see below). \
+\
+2/ 
+\b First example: the M/M/1 queue (file \cf2 MM1.c\cf0 )\
+
+\f1\b0 Recall
+\f0  that the first `M\'92 means that the inter-arrival times are i.i.d. with the Exponential distribution (the memoryless distribution); in other words, the arrival process is a Poisson process. The second `M\'92 means that the services times of the different customers are i.i.d. with the Exponential distribution as well. (The letter `M\'92 is used because of the first letter in `Markov\'92.) The `1\'92 means that there is a single server.\
+\
+3/ 
+\b Second example: the M/M/infinity (file \cf2 MMinf.c\cf0 )
+\b0 \
+In this model, the inter-arrival times are i.i.d. with the Exponential distribution (the memoryless distribution); in other words, the arrival process is a Poisson process. The second `M\'92 means that the services times of the different customers are i.i.d. with the Exponential distribution as well. There are an infinite number of servers; in other words, there is no waiting time, any arrival customer finds a server to serve it; the queue actually behaves as a simple (Exponentially distributed) delay.}
