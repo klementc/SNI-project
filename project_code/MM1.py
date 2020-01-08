@@ -8,12 +8,96 @@ import numpy as np
 import sys, getopt
 from math import log
 import CoreSim as cs
+from collections import deque
 
 def expo(mean):
     return -mean*log(np.random.random_sample())
 
 arr = 1		# event-class: arrivals
 dep = 2		# event-class: departures
+
+
+def sim_mm1(mtba, mst, T, seed, K):
+    np.random.seed(seed)
+
+    # --- first operations on the scheduler
+
+    EvL = cs.LinkedList(T)	# --- end of simulation at time T
+
+    t = expo(mtba)
+    ev = cs.CREATE_EV(t,arr)
+    EvL.InsertEv(ev)	# --- first arrival at time t
+
+    t = t + expo(mst)
+    ev = cs.CREATE_EV(t,dep)
+    EvL.InsertEv(ev)	# --- first departure at time t
+
+    # --- initializing main variables
+    s = 0.0
+    nbUnits = 0
+    t_old = 0.0
+    t_next_arr = 0.0
+    nb_served = 0
+    queue = deque([])
+    totresponsetime = 0
+
+    totjitter = 0
+    oldjitter = -1
+
+    nclass = -1
+    ### --- central simulation loop
+    while nclass != cs.END_SIM and nb_served != K:
+        time, nclass = EvL.FirstEv()
+        # ----------
+        if nclass == arr:
+            queue.append(time)
+            s = s + nbUnits*(time - t_old)
+            nbUnits = nbUnits + 1
+            t = time + expo(mtba)
+            ev = cs.CREATE_EV(t,arr)
+            EvL.InsertEv(ev)
+            t_next_arr = t
+        # ----------
+        elif nclass == dep:
+            nb_served = nb_served + 1
+            s = s + nbUnits*(time - t_old)
+            nbUnits = nbUnits - 1
+            #print("a:"+str(queue[0])+" d:"+str(time))
+
+            rt = time - queue.popleft()
+            totresponsetime += rt
+            if(oldjitter != -1):
+                totjitter += abs(rt-oldjitter)
+            oldjitter = rt
+                
+            if (nb_served == K):
+                meanNbOfUnits = s/time
+            
+            if nbUnits > 0:
+                t = time + expo(mst)
+            else:
+                t = t_next_arr + expo(mst)
+            ev = cs.CREATE_EV(t,dep)
+            EvL.InsertEv(ev)
+        # ----------
+        elif nclass == cs.END_SIM:
+            s = s + nbUnits*(T - t_old)
+            meanNbOfUnits = s/T
+        # ----------
+        else:
+            print("Error")
+        #
+        #
+        t_old = time
+    ### --- central simulation loop
+
+    # --- output
+    print("\n %d clients were served out of %d Maximum" % (nb_served, K))
+    print("\n --- meanNbOfUnits = %f\n" % meanNbOfUnits)
+    print("mean service time: "+str(totresponsetime/nb_served))
+    print("mean service jitter: "+str(totjitter/(nb_served-1))) 
+
+
 
 if __name__ == "__main__":
     params = sys.argv[1:]
@@ -27,69 +111,4 @@ if __name__ == "__main__":
         seed = int(sys.argv[4])		# seed for the pseudo-r.n.
         K = int(sys.argv[5])
         print("\n --- Data: mtba = %.1f, mst = %.1f, T = %.1f, seed = %d" % (mtba,mst,T,seed))
-np.random.seed(seed)
-
-# --- first operations on the scheduler
-
-EvL = cs.LinkedList(T)	# --- end of simulation at time T
-
-t = expo(mtba)
-ev = cs.CREATE_EV(t,arr)
-EvL.InsertEv(ev)	# --- first arrival at time t
-
-t = t + expo(mst)
-ev = cs.CREATE_EV(t,dep)
-EvL.InsertEv(ev)	# --- first departure at time t
-
-# --- initializing main variables
-s = 0.0
-nbUnits = 0
-t_old = 0.0
-t_next_arr = 0.0
-nb_served = 0
-
-nclass = -1
-### --- central simulation loop
-while nclass != cs.END_SIM and nb_served != K:
-    time, nclass = EvL.FirstEv()
-    # ----------
-    if nclass == arr:
-        s = s + nbUnits*(time - t_old)
-        nbUnits = nbUnits + 1
-        t = time + expo(mtba)
-        ev = cs.CREATE_EV(t,arr)
-        EvL.InsertEv(ev)
-        t_next_arr = t
-    # ----------
-    elif nclass == dep:
-        nb_served = nb_served + 1
-        s = s + nbUnits*(time - t_old)
-        nbUnits = nbUnits - 1
-
-        if (nb_served == K):
-            meanNbOfUnits = s/T
-        
-        if nbUnits > 0:
-            t = time + expo(mst)
-        else:
-            t = t_next_arr + expo(mst)
-        ev = cs.CREATE_EV(t,dep)
-        EvL.InsertEv(ev)
-     # ----------
-    elif nclass == cs.END_SIM:
-        s = s + nbUnits*(T - t_old)
-        meanNbOfUnits = s/T
-     # ----------
-    else:
-        print("Error")
-    #
-    #
-    t_old = time
-    ### --- central simulation loop
-
-# --- output
-print("\n %d clients were served out of %d Maximum" % (nb_served, K))
-print("\n --- meanNbOfUnits = %f\n" % meanNbOfUnits)
-
-        
-    
+        sim_mm1(mtba,mst,T,seed, K)
