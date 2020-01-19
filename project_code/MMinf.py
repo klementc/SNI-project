@@ -79,11 +79,14 @@ def sim_mminf(mtba,mst,T,seed,K):
     # --- end of main loop
 
     # --- ouput
-    print("\n %d clients were served out of %d Maximum" % (nb_served, K))
-    print("\n --- meanNbOfUnits = %f\n" % meanNbOfUnits)
-    print("mean service time: "+str(totresponsetime/nb_served))
-    print("mean service jitter: "+str(totjitter/(nb_served-1))) 
+    #print("\n %d clients were served out of %d Maximum" % (nb_served, K))
+    #print("\n --- meanNbOfUnits = %f\n" % meanNbOfUnits)
+    #print("mean service time: "+str(totresponsetime/nb_served))
+    #print("mean service jitter: "+str(totjitter/(nb_served-1))) 
 
+    return {"meanNbofunits":meanNbOfUnits,
+            "meanServiceTime":totresponsetime/nb_served,
+            "meanServiceJitter: ":totjitter/(nb_served-1)}
 
 if __name__ == "__main__":
     params = sys.argv[1:]
