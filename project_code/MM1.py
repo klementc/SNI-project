@@ -114,4 +114,4 @@ if __name__ == "__main__":
         seed = int(sys.argv[4])		# seed for the pseudo-r.n.
         K = int(sys.argv[5])
         print("\n --- Data: mtba = %.1f, mst = %.1f, T = %.1f, seed = %d" % (mtba,mst,T,seed))
-        sim_mm1(mtba,mst,T,seed, K)
+        print(sim_mm1(mtba,mst,T,seed, K))

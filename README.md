@@ -32,6 +32,14 @@ output example:
 	--- meanNbOfUnits = 982.391006
 ```
 
+```
+for i in $(seq 0 0.1 1.1)
+do
+	python MM1.py 1.0 $i 10000 3117 100000 
+	python MD1.py 1.0 $i 10000 3117 100000 
+done
+```
+
 # Question 3:
 
 Same things
@@ -50,3 +58,24 @@ $ python MMinf.py 3 7 10000 3117 100000
  --- meanNbOfUnits = 2.307472
 
 ```
+
+```
+for i in $(seq 0 0.2 10)
+do
+	python MMinf.py 1.0 $i 10000 3117 100000 
+	python MDinf.py 1.0 $i 10000 3117 100000 
+done
+```
+**The results show little's law**
+
+# Question 4/5: 
+Do the same things with MM1 and MD1, and look at the two other values
+
+```
+for i in $(seq 0 0.2 10)
+do
+	python MMinf.py 1.0 $i 10000 3117 100000 
+	python MM1.py 1.0 $i 10000 3117 100000 
+done
+```
+**We can see MMinf is stable, MM1 is not at all**

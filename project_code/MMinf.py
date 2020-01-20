@@ -100,7 +100,7 @@ if __name__ == "__main__":
         seed = int(sys.argv[4])		# seed for the pseudo-random numbers
         K = int(sys.argv[5])
         print("\n --- Data: mtba = %.1f, mst = %.1f, T = %.1f, seed = %d" % (mtba,mst,T,seed))
-        sim_mminf(mtba,mst,T,seed,K)
+        print(sim_mminf(mtba,mst,T,seed,K))
 
 
 
