@@ -47,6 +47,11 @@ nbUnits = 0
 t_old = 0.0
 t_next_arr = 0.0
 nb_served = 0
+queue = deque([])
+totresponsetime = 0
+
+totjitter = 0
+oldjitter = -1
 
 nclass = -1
 ### --- central simulation loop
@@ -54,6 +59,7 @@ while nclass != cs.END_SIM and nb_served != K:
     time, nclass = EvL.FirstEv()
     # ----------
     if nclass == arr:
+        queue.append(time)
         s = s + nbUnits*(time - t_old)
         nbUnits = nbUnits + 1
         t = time + expo(mtba)
@@ -65,6 +71,12 @@ while nclass != cs.END_SIM and nb_served != K:
         nb_served = nb_served + 1
         s = s + nbUnits*(time - t_old)
         nbUnits = nbUnits - 1
+        
+        rt = time - queue.popleft()
+        totresponsetime += rt
+        if(oldjitter != -1):
+            totjitter += abs(rt-oldjitter)
+        oldjitter = rt
 
         if (nb_served == K):
             meanNbOfUnits = s/T
@@ -90,6 +102,13 @@ while nclass != cs.END_SIM and nb_served != K:
 # --- output
 print("\n %d clients were served out of %d Maximum" % (nb_served, K))
 print("\n --- meanNbOfUnits = %f\n" % meanNbOfUnits)
+#print("mean service time: "+str(totresponsetime/nb_served))
+#print("mean service jitter: "+str(totjitter/(nb_served-1))) 
+
+return {"meanNbofunits":meanNbOfUnits,
+        "meanServiceTime":totresponsetime/nb_served,
+        "meanServiceJitter: ":totjitter/(nb_served-1)}
+
 
         
     
