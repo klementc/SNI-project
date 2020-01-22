@@ -105,9 +105,7 @@ print("\n --- meanNbOfUnits = %f\n" % meanNbOfUnits)
 #print("mean service time: "+str(totresponsetime/nb_served))
 #print("mean service jitter: "+str(totjitter/(nb_served-1))) 
 
-return {"meanNbofunits":meanNbOfUnits,
-        "meanServiceTime":totresponsetime/nb_served,
-        "meanServiceJitter: ":totjitter/(nb_served-1)}
+
 
 
         
