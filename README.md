@@ -1,16 +1,19 @@
 # SNI-project
 This repository contains the code used for the 2019-2020 SNI project at univ rennes 1.
+The *_base code repositories contain the code that has been given to us (with the addition of a Makefile for the C code).
+Our modifications of this code can be found in the project_code folder.
+
 # Question 1:
 Add the K parameter.
 
-- **Does "serve" mean termination or arrival? For now I considered termination**
+To answer this question, we added a new variable called K. Then we count the number of clients served.
+If the number of clients served goes over this value K, we go out of the simulation loop and give results back to the user.
 
 # Question 2:
 Just remove the *expo()* calls to have a determinisic value of exactly mean
 service time.
 
-- in the pdf, they use different seeds in the 2 cases to perform the comparison,
-  should we do that? why?
+Here, we just replaced calls to the exponential distribution function when generating a new mst value by a constant.
   
 output example:
 ```
@@ -42,7 +45,7 @@ done
 
 # Question 3:
 
-Same things
+Same thing as question 2 but in an other model.
 
 ```
 $ python MDinf.py 3 7 10000 3117 100000
@@ -69,7 +72,11 @@ done
 **The results show little's law**
 
 # Question 4/5: 
-Do the same things with MM1 and MD1, and look at the two other values
+
+We added a queue to store service times, and use it to measure jitter and mean delays. 
+This queue is used to store the time at which customers arrive and are removed at departure.
+
+The jitter is calculated by making the difference of two successive delays.
 
 ```
 for i in $(seq 0 0.2 10)
