@@ -8,6 +8,7 @@ import numpy as np
 import sys, getopt
 from math import log
 import CoreSim as cs
+from collections import deque
 
 def expo(mean):
     return -mean*log(np.random.random_sample())
